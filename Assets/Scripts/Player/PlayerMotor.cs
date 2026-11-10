@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerMotor : MonoBehaviour
 {
     public float speed = 5f;
+    public float turnSpeed = 10f;
     public InputActionReference moveAction;
     Transform cam;
 
@@ -26,5 +27,11 @@ public class PlayerMotor : MonoBehaviour
         Vector3 dir = forward * input.y + right * input.x;
 
         controller.Move(dir * speed * Time.deltaTime);
+
+        if (forward.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(forward);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        }
     }
 }
